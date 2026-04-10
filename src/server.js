@@ -9,7 +9,8 @@ const connectDB = require('./config/db'); // Import DB logic
 const cardRoutes = require('./routes/cardRoutes');
 const indexRoutes = require('./routes/indexRoutes');
 const deckRoutes = require('./routes/deckRoutes');
-const authRoutes = require('./routes/authRoutes');
+//const authRoutes = require('./routes/authRoutes');
+//const protect = require('./middleware/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,7 +25,7 @@ connectDB();
 
 // Use Routes
 app.use('/', indexRoutes); // Handles /api/status
-app.use('/auth', authRoutes);
+//app.use('/auth', authRoutes);
 // Mount card routes at the '/cards' base path (JWT protected)
 app.use('/cards', cardRoutes);
 // Mount deck routes (JWT protected)
