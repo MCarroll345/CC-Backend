@@ -6,9 +6,6 @@ exports.createDeck = async (req, res) => {
     const { userId, deckName } = req.body;
     if (!userId) return res.status(400).json({ message: 'userId is required' });
 
-    const allDecks = await Deck.find();
-    console.log('Existing decks:', allDecks);
-
     const newDeck = await Deck.create({ userId, deckName });
     res.status(201).json({ message: 'Deck created successfully!', deck: newDeck });
   } catch (err) {
@@ -20,9 +17,8 @@ exports.createDeck = async (req, res) => {
 exports.getDecks = async (req, res) => {
   try {
     const { userId } = req.params;
-    const deck = await Deck.findOne({ userId }).populate('cards');
-    if (!deck) return res.json({ userId, cards: [] });
-    res.json(deck);
+    const allDecks = await Deck.find({ userId }).populate('cards');
+    res.json(allDecks);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching deck', error: err.message });
   }
