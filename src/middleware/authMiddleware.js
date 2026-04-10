@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+/*const jwt = require('jsonwebtoken');
 
 const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -18,4 +18,4 @@ const protect = (req, res, next) => {
   }
 };
 
-module.exports = protect;
+module.exports = protect;*/
