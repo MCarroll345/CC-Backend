@@ -8,6 +8,6 @@ const cardController = require('../controllers/cardController');
 router.get('/', cardController.getCards);
 router.post('/', cardController.createCard);
 router.put('/:id', cardController.updateCard);
-router.delete('/:id', productController.deleteProduct);
+router.delete('/:id', cardController.deleteCard);
 
 module.exports = router;
