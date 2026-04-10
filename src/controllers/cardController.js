@@ -19,7 +19,7 @@ exports.api = async (req, res) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const result = await response.json();
-    console.log(result);
+    res.json(result);
   } catch (err) {
     res.status(500).json({ message: "Error fetching cards" });
   }
