@@ -27,9 +27,20 @@ exports.api = async (req, res) => {
 
 // CREATE a new card
 exports.createCard = async (req, res) => {
+    const { cardname } = req.params;
   try {
-    const { name, cardtype, description, image } = req.body;
-    const newCard = await Card.create({ name, cardtype, description, image });
+    const resporse = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardname)}`);
+    if (!resporse.ok) {
+      throw new Error(`Response status: ${resporse.status}`);
+    }
+    const data = await resporse.json();
+    const newCard = await Card.create({
+      name: data.name,
+      manaCost: data.mana_cost,
+      type: data.type_line,
+      oracleText: data.oracle_text,
+      imageUrl: data.image_uris?.normal || null
+    });
     res.status(201).json({ message: 'Card added successfully!', card: newCard });
   } catch (err) {
     res.status(500).json({ message: 'Error adding card', error: err.message });
