@@ -12,9 +12,14 @@ exports.getCards = async (req, res) => {
 };
 
 exports.api = async (req, res) => {
+  const url = "https://api.scryfall.com/cards/search?q=oracle%3A%22lightning+bolt%22+lang%3Aen&unique=prints";
   try {
-    const cards = await get('https://api.scryfall.com/cards/search?order=cmc&q=c%3Ared+pow%3D3');
-    res.json(cards);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const result = await response.json();
+    console.log(result);
   } catch (err) {
     res.status(500).json({ message: "Error fetching cards" });
   }
