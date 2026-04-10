@@ -6,8 +6,8 @@ exports.createDeck = async (req, res) => {
     const { userId, deckName } = req.body;
     if (!userId) return res.status(400).json({ message: 'userId is required' });
 
-    const existing = await Deck.findOne({ userId });
-    if (existing) return res.status(409).json({ message: 'Deck already exists for this user' });
+    const allDecks = await Deck.find();
+    console.log('Existing decks:', allDecks);
 
     const newDeck = await Deck.create({ userId, deckName });
     res.status(201).json({ message: 'Deck created successfully!', deck: newDeck });
