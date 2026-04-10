@@ -7,7 +7,7 @@ const cardController = require('../controllers/cardController');
 // Notice we just use '/' here, because we will mount this router on '/products' later
 router.get('/', cardController.getCards);
 router.get('/api', cardController.api);
-router.post('/', cardController.createCard);
+router.post('/:cardname', cardController.createCard);
 router.put('/:id', cardController.updateCard);
 router.delete('/:id', cardController.deleteCard);
 
