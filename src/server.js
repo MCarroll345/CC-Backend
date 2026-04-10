@@ -27,9 +27,9 @@ connectDB();
 app.use('/', indexRoutes); // Handles /api/status
 app.use('/auth', authRoutes);
 // Mount card routes at the '/cards' base path (JWT protected)
-app.use('/cards', protect, cardRoutes);
+app.use('/cards', cardRoutes);
 // Mount deck routes (JWT protected)
-app.use('/deck', protect, deckRoutes);
+app.use('/deck', deckRoutes);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port: ${PORT}`);
