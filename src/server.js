@@ -10,7 +10,6 @@ const cardRoutes = require('./routes/cardRoutes');
 const indexRoutes = require('./routes/indexRoutes');
 const deckRoutes = require('./routes/deckRoutes');
 const authRoutes = require('./routes/authRoutes');
-const protect = require('./middleware/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
