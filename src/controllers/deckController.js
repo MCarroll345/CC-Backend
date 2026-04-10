@@ -1,8 +1,23 @@
 const Deck = require('../models/Deck');
 const Card = require('../models/Card');
 
+createDeck = async (req, res) => {
+  try {
+    const { userId, deckName } = req.body;
+    if (!userId) return res.status(400).json({ message: 'userId is required' });
+
+    const existing = await Deck.findOne({ userId });
+    if (existing) return res.status(409).json({ message: 'Deck already exists for this user' });
+
+    const newDeck = await Deck.create({ userId, deckName });
+    res.status(201).json({ message: 'Deck created successfully!', deck: newDeck });
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating deck', error: err.message });
+  }
+}
+
 // View deck for a user
-exports.getDeck = async (req, res) => {
+exports.getDecks = async (req, res) => {
   try {
     const { userId } = req.params;
     const deck = await Deck.findOne({ userId }).populate('cards');
