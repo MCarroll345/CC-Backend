@@ -3,10 +3,10 @@ const Card = require('../models/Card');
 
 exports.createDeck = async (req, res) => {
   try {
-    const { userId, deckName } = req.body;
+    const { userId, deckName, format } = req.body;
     if (!userId) return res.status(400).json({ message: 'userId is required' });
 
-    const newDeck = await Deck.create({ userId, deckName });
+    const newDeck = await Deck.create({ userId, deckName, format });
     res.status(201).json({ message: 'Deck created successfully!', deck: newDeck });
   } catch (err) {
     res.status(500).json({ message: 'Error creating deck', error: err.message });

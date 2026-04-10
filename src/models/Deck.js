@@ -9,6 +9,7 @@ const deckItemSchema = new Schema({
 const deckSchema = new Schema({
   userId: { type: String, required: true, index: true },
   deckName: { type: String, default: 'My Deck' },
+  format: { type: String, default: 'Commander' },
   cards: [deckItemSchema]
 }, { timestamps: true });
 
