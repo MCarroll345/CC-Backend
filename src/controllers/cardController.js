@@ -11,10 +11,19 @@ exports.getCards = async (req, res) => {
   }
 };
 
+exports.api = async (req, res) => {
+  try {
+    const cards = await get('https://api.scryfall.com/cards/search?order=cmc&q=c%3Ared+pow%3D3');
+    res.json(cards);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching cards" });
+  }
+};
+
 // CREATE a new card
 exports.createCard = async (req, res) => {
   try {
-    const { name, cardtype, description, image } = req.body; // include image support
+    const { name, cardtype, description, image } = req.body;
     const newCard = await Card.create({ name, cardtype, description, image });
     res.status(201).json({ message: 'Card added successfully!', card: newCard });
   } catch (err) {
@@ -44,15 +53,15 @@ exports.updateCard = async (req, res) => {
 };
 
 // DELETE a card
-exports.deleteProduct = async (req, res) => {
+exports.deleteCard = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Product.findByIdAndDelete(id);
+    const deleted = await Card.findByIdAndDelete(id);
     if (!deleted) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Card not found' });
     }
-    res.json({ message: 'Product deleted', product: deleted });
+    res.json({ message: 'Card deleted', card: deleted });
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting product', error: err.message });
+    res.status(500).json({ message: 'Error deleting card', error: err.message });
   }
 };

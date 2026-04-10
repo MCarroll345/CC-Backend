@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const basketController = require('../controllers/deckController');
+const deckController = require('../controllers/deckController');
 
 // View basket for a user (GET /basket/:userId)
-router.get('/:userId', basketController.getBasket);
+router.get('/:userId', deckController.getDeck);
 
 // Add to basket (POST /basket/add)
-router.post('/add', basketController.addToBasket);
+router.post('/add', deckController.addToDeck);
 
 // Remove from basket (DELETE /basket/remove) - reduces quantity or removes
-router.delete('/remove', basketController.removeFromBasket);
+router.delete('/remove', deckController.removeFromDeck);
 
 module.exports = router;
