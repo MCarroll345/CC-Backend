@@ -1,7 +1,7 @@
 const Deck = require('../models/Deck');
 const Card = require('../models/Card');
 
-createDeck = async (req, res) => {
+exports.createDeck = async (req, res) => {
   try {
     const { userId, deckName } = req.body;
     if (!userId) return res.status(400).json({ message: 'userId is required' });
