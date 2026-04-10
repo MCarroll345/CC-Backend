@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const deckItemSchema = new Schema({
-  cards: { type: Schema.Types.ObjectId, ref: 'Card', required: true },
+  card: { type: Schema.Types.ObjectId, ref: 'Card', required: true },
   quantity: { type: Number, default: 1, min: 1 }
 });
 

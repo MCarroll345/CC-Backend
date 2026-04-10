@@ -27,18 +27,14 @@ exports.getDecks = async (req, res) => {
 // Add card to deck (or increase quantity)
 exports.addToDeck = async (req, res) => {
   try {
-    const { userId, cardName, quantity = 1 } = req.body;
+    const { userId, cardName, deckName, quantity = 1 } = req.body;
     if (!userId || !cardName) return res.status(400).json({ message: 'userId and cardName required' });
 
     const card = await Card.findOne({ name: cardName });
     if (!card) return res.status(404).json({ message: 'Card not found' });
 
-    let deck = await Deck.findOne({ userId });
-    if (!deck) {
-      deck = await Deck.create({ userId, cards: [{ card: card._id, quantity }] });
-      await deck.populate('cards.card');
-      return res.status(201).json({ message: 'Added to new deck', deck });
-    }
+    let deck = await Deck.findOne({ userId, deckName });
+    if (!deck) return res.status(404).json({ message: 'Deck not found' });
 
     const existing = deck.cards.find(c => c.card.toString() === card._id.toString());
     if (existing) {
