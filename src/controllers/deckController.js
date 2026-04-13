@@ -24,6 +24,22 @@ exports.getDecks = async (req, res) => {
   }
 };
 
+exports.getDeckPrice = async (req, res) => {
+  try {
+    const { userId, deckName} = req.body;
+    if (!userId || !deckName) return res.status(400).json({ message: 'userId and deckName required' });
+    for (const deck of await Deck.find({ userId, deckName }).populate('cards.card')) {
+      const totalPrice = deck.cards.reduce((sum, item) => {
+        const cardPrice = item.card.price || 0;
+        return sum + (cardPrice * item.quantity);
+      }, 0);
+      res.json({ deckName: deck.deckName, totalPrice });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error adding to deck', error: err.message });
+  }
+};
+
 // Add card to deck (or increase quantity)
 exports.addToDeck = async (req, res) => {
   try {
