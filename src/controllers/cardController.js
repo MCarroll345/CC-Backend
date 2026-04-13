@@ -29,11 +29,11 @@ exports.api = async (req, res) => {
 exports.createCard = async (req, res) => {
     const { cardname } = req.params;
   try {
-    const resporse = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardname)}`);
-    if (!resporse.ok) {
-      throw new Error(`Response status: ${resporse.status}`);
+    const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardname)}`);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
     }
-    const data = await resporse.json();
+    const data = await response.json();
     const newCard = await Card.create({
       name: data.name,
       manaCost: data.mana_cost,
@@ -45,27 +45,6 @@ exports.createCard = async (req, res) => {
     res.status(201).json({ message: 'Card added successfully!', card: newCard });
   } catch (err) {
     res.status(500).json({ message: 'Error adding card', error: err.message });
-  }
-};
-
-// UPDATE a card
-exports.updateCard = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updates = req.body;
-
-    const updatedCard = await Card.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true
-    });
-
-    if (!updatedCard) {
-      return res.status(404).json({ message: 'Card not found' });
-    }
-
-    res.json({ message: 'Card updated', card: updatedCard });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating card', error: err.message });
   }
 };
 

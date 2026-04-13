@@ -4,13 +4,15 @@ const deckController = require('../controllers/deckController');
 
 // View decks for a user (GET /decks/:userId)
 router.get('/:userId', deckController.getDecks);
-// Create a new deck (POST /decks)
+// Create a new deck (POST /decks) - expects { userId, deckName, format(Commander, Standard) }
 router.post('/', deckController.createDeck);
-// Add to deck (POST /decks/add)
+// Add to deck (POST /decks/add) - expects { userId, cardName, deckName, quantity }
 router.post('/add', deckController.addToDeck);
-// Remove from deck (DELETE /decks/remove) - reduces quantity or removes
+// Remove from deck (DELETE /decks/remove) - expects { userId, cardId, deckName, removeAll (optional, default false) }
 router.delete('/remove', deckController.removeFromDeck);
 // Get deck price (POST /decks/price) - expects { userId, deckName }
 router.post('/price', deckController.getDeckPrice);
+// Delete deck (DELETE /decks/delete) - expects { userId, deckName }
+router.delete('/delete', deckController.deleteDecks);
 
 module.exports = router;
