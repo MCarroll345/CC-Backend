@@ -82,7 +82,7 @@ exports.addToDeck = async (req, res) => {
 // Remove card or reduce quantity
 exports.removeFromDeck = async (req, res) => {
   try {
-    const { userId, cardId, deckName, removeAll} = req.body;
+    const { userId, cardId, deckName, quantity, removeAll} = req.body;
     if (!userId) return res.status(400).json({ message: 'userId required' });
 
     const deck = await Deck.findOne({ userId, deckName });
@@ -95,7 +95,7 @@ exports.removeFromDeck = async (req, res) => {
       const idx = deck.cards.findIndex(c => c.card.toString() === cardId);
       if (idx === -1) return res.status(404).json({ message: 'Card not in deck' });
 
-      deck.cards[idx].quantity = Math.max(0, deck.cards[idx].quantity - 1);
+      deck.cards[idx].quantity -= quantity;
       if (deck.cards[idx].quantity === 0) deck.cards.splice(idx, 1);
     }
 
