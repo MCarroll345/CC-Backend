@@ -81,10 +81,10 @@ exports.removeFromDeck = async (req, res) => {
 // Remove a deck item by its subdocument id (itemId)
 exports.removeItem = async (req, res) => {
   try {
-    const { userId, itemId } = req.body;
-    if (!userId || !itemId) return res.status(400).json({ message: 'userId and itemId required' });
+    const { userId, deckID, itemId } = req.body;
+    if (!userId || !deckID || !itemId) return res.status(400).json({ message: 'userId, deckID, and itemId required' });
 
-    const deck = await Deck.findOne({ userId });
+    const deck = await Deck.findOne({ userId, _id: deckID });
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
 
     const idx = deck.cards.findIndex(c => c._id.toString() === itemId);
