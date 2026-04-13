@@ -53,17 +53,19 @@ exports.addToDeck = async (req, res) => {
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
 
     const existing = deck.cards.find(c => c.card.toString() === card._id.toString());
+
     if (deck.format === 'Commander' && !existing && deck.cards.length >= 100) {
       return res.status(400).json({ message: 'Commander decks can only have 100 cards' });
     }
     else if (existing && deck.format === 'Commander') {
       return res.status(400).json({ message: 'Commander decks can only have one copy of each card' });
     } 
-    else if (existing && deck.format === 'Standard' && existing.quantity + quantity > 4) {
-      existing.quantity += 1;
-    } 
+
+    if (existing && deck.format === 'Standard' && existing.quantity + quantity > 4) {
+      return res.status(400).json({ message: 'Standard decks can only have 4 copies of each card' });
+    }
     else {
-      deck.cards.push({ card: card._id, quantity });
+      existing.quantity +=quantity;
     }
 
     await deck.save();
