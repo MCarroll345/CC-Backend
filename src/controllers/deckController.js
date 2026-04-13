@@ -3,10 +3,10 @@ const Card = require('../models/Card');
 
 exports.createDeck = async (req, res) => {
   try {
-    const { userId, deckName } = req.body;
+    const { userId, deckName, format } = req.body;
     if (!userId) return res.status(400).json({ message: 'userId is required' });
 
-    const newDeck = await Deck.create({ userId, deckName });
+    const newDeck = await Deck.create({ userId, deckName, format });
     res.status(201).json({ message: 'Deck created successfully!', deck: newDeck });
   } catch (err) {
     res.status(500).json({ message: 'Error creating deck', error: err.message });
@@ -21,6 +21,22 @@ exports.getDecks = async (req, res) => {
     res.json(allDecks);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching deck', error: err.message });
+  }
+};
+
+exports.getDeckPrice = async (req, res) => {
+  try {
+    const { userId, deckName} = req.body;
+    if (!userId || !deckName) return res.status(400).json({ message: 'userId and deckName required' });
+    for (const deck of await Deck.find({ userId, deckName }).populate('cards.card')) {
+      const totalPrice = deck.cards.reduce((sum, item) => {
+        const cardPrice = item.card.price || 0;
+        return sum + (cardPrice * item.quantity);
+      }, 0);
+      res.json({ deckName: deck.deckName, totalPrice });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error adding to deck', error: err.message });
   }
 };
 
@@ -81,10 +97,10 @@ exports.removeFromDeck = async (req, res) => {
 // Remove a deck item by its subdocument id (itemId)
 exports.removeItem = async (req, res) => {
   try {
-    const { userId, itemId } = req.body;
-    if (!userId || !itemId) return res.status(400).json({ message: 'userId and itemId required' });
+    const { userId, deckID, itemId } = req.body;
+    if (!userId || !deckID || !itemId) return res.status(400).json({ message: 'userId, deckID, and itemId required' });
 
-    const deck = await Deck.findOne({ userId });
+    const deck = await Deck.findOne({ userId, _id: deckID });
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
 
     const idx = deck.cards.findIndex(c => c._id.toString() === itemId);

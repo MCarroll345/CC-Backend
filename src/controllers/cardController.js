@@ -38,6 +38,7 @@ exports.createCard = async (req, res) => {
       name: data.name,
       manaCost: data.mana_cost,
       type: data.type_line,
+      price: data.prices.eur || null,
       oracleText: data.oracle_text,
       imageUrl: data.image_uris?.normal || null
     });

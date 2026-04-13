@@ -10,5 +10,7 @@ router.post('/', deckController.createDeck);
 router.post('/add', deckController.addToDeck);
 // Remove from deck (DELETE /decks/remove) - reduces quantity or removes
 router.delete('/remove', deckController.removeFromDeck);
+// Get deck price (POST /decks/price) - expects { userId, deckName }
+router.post('/price', deckController.getDeckPrice);
 
 module.exports = router;
