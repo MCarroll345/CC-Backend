@@ -43,7 +43,8 @@ exports.getDeckPrice = async (req, res) => {
 // Add card to deck (or increase quantity)
 exports.addToDeck = async (req, res) => {
   try {
-    const { userId, cardName, deckName, quantity = 1 } = req.body;
+    const { userId, cardName, deckName } = req.body;
+    const quantity = parseInt(req.body.quantity) || 1;
     if (!userId || !cardName) return res.status(400).json({ message: 'userId and cardName required' });
 
     const card = await Card.findOne({ name: cardName });
