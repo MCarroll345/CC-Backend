@@ -60,7 +60,7 @@ exports.addToDeck = async (req, res) => {
       return res.status(400).json({ message: 'Commander decks can only have one copy of each card' });
     } 
     else if (existing && deck.format === 'Standard' && existing.quantity + quantity > 4) {
-      existing.quantity = Math.max(1, existing.quantity + quantity);
+      existing.quantity += 1;
     } 
     else {
       deck.cards.push({ card: card._id, quantity });
