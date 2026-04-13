@@ -83,11 +83,8 @@ exports.removeFromDeck = async (req, res) => {
     const deck = await Deck.findOne({ userId, deckName });
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
 
-    const idx = deck.cards.findIndex(c => c.card.toString() === cardId);
-    if (idx === -1) return res.status(404).json({ message: 'Card not in deck' });
-    
     if (removeAll) {
-      deck.cards.splice(idx, 1);
+      deck.cards = [];
     } 
     else {
       const idx = deck.cards.findIndex(c => c.card.toString() === cardId);
