@@ -8,7 +8,7 @@ router.get('/:userId', deckController.getDecks);
 router.post('/', deckController.createDeck);
 // Add to deck (POST /decks/add) - expects { userId, cardName, deckName, quantity }
 router.post('/add', deckController.addToDeck);
-// Remove from deck (DELETE /decks/remove) - expects { userId, cardId, deckName, removeAll (optional, default false) }
+// Remove from deck (DELETE /decks/remove) - expects { userId, cardId, deckName, quantity, removeAll(boolean) }
 router.delete('/remove', deckController.removeFromDeck);
 // Get deck price (POST /decks/price) - expects { userId, deckName }
 router.post('/price', deckController.getDeckPrice);
