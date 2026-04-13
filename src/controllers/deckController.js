@@ -1,5 +1,6 @@
 const Deck = require('../models/Deck');
 const Card = require('../models/Card');
+const e = require('express');
 
 exports.createDeck = async (req, res) => {
   try {
@@ -107,6 +108,20 @@ exports.removeFromDeck = async (req, res) => {
     res.status(500).json({ message: 'Error removing from deck', error: err.message });
   }
 };
+
+exports.updateDeck = async (req, res) => {
+  try {
+    const { userId, deckName, newDeckName, newFormat } = req.body;
+    if (!userId || !deckName || !newDeckName) return res.status(400).json({ message: 'userId, deckName and newDeckName required' });
+
+    const deck = await Deck.findOneAndUpdate({ userId, deckName }, { deckName: newDeckName, format: newFormat }, { new: true });
+    if (!deck) return res.status(404).json({ message: 'Deck not found' });
+
+    res.json({ message: 'Deck updated', deck });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating deck', error: err.message });
+  }
+}
 
 // Clear all items for a user's deck
 exports.deleteDecks = async (req, res) => {

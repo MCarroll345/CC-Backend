@@ -10,6 +10,8 @@ router.post('/', deckController.createDeck);
 router.post('/add', deckController.addToDeck);
 // Remove from deck (DELETE /decks/remove) - expects { userId, cardId, deckName, quantity, removeAll(boolean) }
 router.delete('/remove', deckController.removeFromDeck);
+// Update deck (PUT /decks/update) - expects { userId, deckName, newDeckName, newFormat }
+router.put('/update', deckController.updateDeck);
 // Get deck price (POST /decks/price) - expects { userId, deckName }
 router.post('/price', deckController.getDeckPrice);
 // Delete deck (DELETE /decks/delete) - expects { userId, deckName }
