@@ -8,18 +8,18 @@ const generateToken = (user) =>
 // POST /auth/register
 const register = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+    const { email, username, password } = req.body;
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'Email, username and password are required' });
     }
 
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ email, username });
     if (existing) {
-      return res.status(409).json({ message: 'Email already registered' });
+      return res.status(409).json({ message: 'Email or username already registered' });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, passwordHash });
+    const user = await User.create({ email, username, passwordHash });
 
     res.status(201).json({ token: generateToken(user) });
   } catch (err) {

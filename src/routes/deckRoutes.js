@@ -16,5 +16,7 @@ router.put('/update', deckController.updateDeck);
 router.post('/price', deckController.getDeckPrice);
 // Delete deck (DELETE /decks/delete) - expects { userId, deckName }
 router.delete('/delete', deckController.deleteDecks);
+// Deck recommendations (POST /decks/recommend) - expects { userId, deckName }
+router.post('/recommend', deckController.deckRecom);
 
 module.exports = router;
