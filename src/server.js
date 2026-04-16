@@ -9,6 +9,7 @@ const connectDB = require('./config/db'); // Import DB logic
 const cardRoutes = require('./routes/cardRoutes');
 const indexRoutes = require('./routes/indexRoutes');
 const deckRoutes = require('./routes/deckRoutes');
+const genRoutes = require('./routes/genRoutes');
 const authRoutes = require('./routes/authRoutes');
 //const protect = require('./middleware/authMiddleware');
 
@@ -30,6 +31,8 @@ app.use('/auth', authRoutes);
 app.use('/cards', cardRoutes);
 // Mount deck routes (JWT protected)
 app.use('/deck', deckRoutes);
+// Mount deck routes (JWT protected)
+app.use('/gen', genRoutes);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port: ${PORT}`);

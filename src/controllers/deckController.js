@@ -125,7 +125,7 @@ exports.deckRecom = async (req, res) => {
     const prompt = `You are a Magic: The Gathering expert. Review this ${deck.format} deck and provide concise improvement recommendations.\n\nDeck: ${deckName}\nFormat: ${deck.format}\n\nCards:\n${cardList}\n\nProvide specific suggestions to improve synergy, consistency, and power level.`;
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const result = await model.generateContent(prompt);
 
     res.json({ recommendations: result.response.text() });
