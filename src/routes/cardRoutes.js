@@ -1,14 +1,39 @@
-// src/routes/productRoutes.js
 const express = require('express');
 const router = express.Router();
-// Import the controller functions
-const cardController = require('../controllers/cardController');
+const Card = require('../models/Card');
 
-// Notice we just use '/' here, because we will mount this router on '/products' later
-router.get('/', cardController.getCards);
-//Send the name of the card to add as a param in the URL, e.g. POST /cards/Lightning%20Bolt
-router.post('/:cardname', cardController.createCard);
-//Send the id of the card to update as a param in the URL, e.g. PUT /cards/12345
-router.delete('/:id', cardController.deleteCard);
+router.get('/', (req, res) => {
+  Card.find()
+    .then(cards => res.json(cards))
+    .catch(err => res.status(500).json({ message: 'Error fetching cards', error: err.message }));
+});
 
-module.exports = router;
+router.post('/:cardname', (req, res) => {
+  const { cardname } = req.params;
+  fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardname)}`)
+    .then(response => {
+      if (!response.ok) throw new Error(`Response status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => Card.create({
+      name: data.name,
+      manaCost: data.mana_cost,
+      type: data.type_line,
+      price: data.prices.eur ? parseFloat(data.prices.eur) : null,
+      oracleText: data.oracle_text,
+      imageUrl: data.image_uris?.normal || null
+    }))
+    .then(newCard => res.status(201).json({ message: 'Card added successfully!', card: newCard }))
+    .catch(err => res.status(500).json({ message: 'Error adding card', error: err.message }));
+});
+
+router.delete('/:id', (req, res) => {
+  Card.findByIdAndDelete(req.params.id)
+    .then(deleted => {
+      if (!deleted) return res.status(404).json({ message: 'Card not found' });
+      res.json({ message: 'Card deleted', card: deleted });
+    })
+    .catch(err => res.status(500).json({ message: 'Error deleting card', error: err.message }));
+});
+
+exports.routes = router;

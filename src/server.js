@@ -25,14 +25,11 @@ app.use(express.json({ limit: '10mb' }));
 connectDB();
 
 // Use Routes
-app.use('/', indexRoutes); // Handles /api/status
-app.use('/auth', authRoutes);
-// Mount card routes at the '/cards' base path (JWT protected)
-app.use('/cards', cardRoutes);
-// Mount deck routes (JWT protected)
-app.use('/deck', deckRoutes);
-// Mount deck routes (JWT protected)
-app.use('/gen', genRoutes);
+app.use('/', indexRoutes.routes);
+app.use('/auth', authRoutes.routes);
+app.use('/cards', cardRoutes.routes);
+app.use('/deck', deckRoutes.routes);
+app.use('/gen', genRoutes.routes);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port: ${PORT}`);

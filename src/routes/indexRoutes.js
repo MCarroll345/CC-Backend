@@ -1,8 +1,13 @@
-// src/routes/indexRoutes.js
 const express = require('express');
 const router = express.Router();
-const statusController = require('../controllers/statusController');
 
-router.get('/api/status', statusController.getStatus);
+router.get('/api/status', (req, res) => {
+  res.json({
+    status: 'Online',
+    message: 'AWS Backend is reachable!',
+    owner: 'Mark Carroll',
+    timestamp: new Date()
+  });
+});
 
-module.exports = router;
+exports.routes = router;
