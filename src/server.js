@@ -11,7 +11,7 @@ const indexRoutes = require('./routes/indexRoutes');
 const deckRoutes = require('./routes/deckRoutes');
 const genRoutes = require('./routes/genRoutes');
 const authRoutes = require('./routes/authRoutes');
-//const protect = require('./middleware/authMiddleware');
+const protect = require('./middleware/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,9 +27,10 @@ connectDB();
 // Use Routes
 app.use('/', indexRoutes.routes);
 app.use('/auth', authRoutes.routes);
-app.use('/cards', cardRoutes.routes);
-app.use('/deck', deckRoutes.routes);
-app.use('/gen', genRoutes.routes);
+app.use('/cards', protect, cardRoutes.routes);
+app.use('/deck', protect, deckRoutes.routes);
+app.use('/gen', protect, genRoutes.routes);
+
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port: ${PORT}`);
