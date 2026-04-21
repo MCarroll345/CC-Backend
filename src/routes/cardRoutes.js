@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const Card = require('../models/Card');
+const cron = require('node-cron');
+
+cron.schedule('0 * * * *', async () => {
+  const cards = await Card.find();
+  await Promise.all(cards.map(card =>
+    fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(card.name)}`)
+      .then(res => res.json())
+      .then(data => Card.findByIdAndUpdate(card._id, { price: data.prices.eur ? parseFloat(data.prices.eur) : null }))
+      .catch(err => console.error(`Failed to update price for ${card.name}:`, err.message))
+  ));
+});
 
 router.get('/', (req, res) => {
   Card.find()
